@@ -1,5 +1,4 @@
-IMG_NAME="openplotter-halpi-bookworm-arm64"
-RELEASE="bookworm"
+IMG_NAME="openplotter-halpi"
 IMG_DATE=$(date +%Y-%m-%dT%H_%M_%S)
 FIRST_USER_NAME="pi"
 FIRST_USER_PASS="raspberry"

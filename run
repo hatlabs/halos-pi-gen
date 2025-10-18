@@ -31,12 +31,52 @@ readonly SCRIPT="$PROJECT_ROOT/$(basename "$0")"
 ################################################################################
 # Project-specific commands follow.
 
-function docker-build {
+function docker-build-all {
+  # Build all images in the matrix
+  # Usage: ./run docker-build-all [additional act options]
+
+  # Clean up any existing pigen_work containers first
+  docker-clean
+
   act \
     pull_request \
     -s GITHUB_TOKEN="$(gh auth token)" \
     -P ubuntu-latest-arm64=catthehacker/ubuntu:act-latest \
     --artifact-server-path $PWD/artifacts \
+    "$@"
+}
+
+function docker-build {
+  # Build a specific image by job name
+  # Usage: ./run docker-build <job-name> [additional act options]
+  # Available job names:
+  #   - "Raspios-HALPI2"
+  #   - "Raspios-lite-HALPI2"
+  #   - "OpenPlotter-HALPI2" (when uncommented in workflow)
+
+  if [ $# -lt 1 ]; then
+    echo "Error: Job name required"
+    echo "Usage: ./run docker-build <job-name>"
+    echo ""
+    echo "Available jobs:"
+    echo "  - Raspios-HALPI2"
+    echo "  - Raspios-lite-HALPI2"
+    echo "  - OpenPlotter-HALPI2"
+    return 1
+  fi
+
+  local job_name="$1"
+  shift
+
+  # Clean up any existing pigen_work containers first
+  docker-clean
+
+  act \
+    pull_request \
+    -s GITHUB_TOKEN="$(gh auth token)" \
+    -P ubuntu-latest-arm64=catthehacker/ubuntu:act-latest \
+    --artifact-server-path $PWD/artifacts \
+    --matrix "name:$job_name" \
     "$@"
 }
 

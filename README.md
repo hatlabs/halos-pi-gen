@@ -1,10 +1,18 @@
-# OpenPlotter-HALPI OS Images
+# HALPI2 OS Images
 
-This repository contains the necessary files to build the OpenPlotter-HALPI OS images. OpenPlotter-HALPI is a Raspberry Pi OS image based on Raspberry Pi OS with the addition of OpenPlotter and customizations for Hat Labs HALPI series of Raspberry Pi computers. These customizations include native support for the SH-RPi power management board and support for NMEA 2000 and NMEA 0183 data interfaces.
+Raspberry Pi OS images customized for the HALPI2 hardware.
+
+The built images include:
+- Raspberry Pi OS Lite with HALPI2 customizations
+- Raspberry Pi OS with Desktop and HALPI2 customizations
+- HaLOS: Containerized Raspberry Pi OS for HALPI2 with common marine applications pre-installed
+- HaLOS-Lite: Containerized Raspberry Pi OS Lite for HALPI2 with common marine applications pre-installed
+- HaLOS-Generic: Containerized Raspberry Pi OS for generic Raspberry Pi hardware with common marine applications pre-installed
+- HaLOS-Generic-Lite: Containerized Raspberry Pi OS Lite for generic Raspberry Pi hardware with common marine applications pre-installed
 
 ## Downloading the Images
 
-The images are available for download on the [releases page](https://github.com/hatlabs/openplotter-halpi/releases).
+The images are available for download on the [releases page](https://github.com/hatlabs/halos/releases).
 
 ## Flashing the Images
 
@@ -20,4 +28,4 @@ With the prerequisites in place, run the following commands to build the image:
 ./run docker-build
 ```
 
-This command will mimic the GitHub Actions workflow and build the image locally. The image files are stored in the `artifacts` directory. All artifacts are zip files that can be extracted to get the `xz` compressed image files. The image can then be flashed to an SSD drive or SD card using the Raspberry Pi Imager as described above.
+This command will mimic the GitHub Actions workflow and build the images locally. The image files are stored in the `artifacts` directory. All artifacts are zip files that can be extracted to get the `xz` compressed image files. The image can then be flashed to an SSD drive or SD card using the Raspberry Pi Imager as described above.

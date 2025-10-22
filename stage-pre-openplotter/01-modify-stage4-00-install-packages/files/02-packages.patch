@@ -1,9 +1,0 @@
-diff --git a/stage4/00-install-packages/02-packages b/stage4/00-install-packages/02-packages
-index fc43d17..e69de29 100644
---- a/stage4/00-install-packages/02-packages
-+++ b/stage4/00-install-packages/02-packages
-@@ -1,4 +0,0 @@
--hunspell-en-gb
--hyphen-en-gb
--wamerican
--wbritish

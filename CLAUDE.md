@@ -55,14 +55,14 @@ These are stock Raspberry Pi OS images with HALPI2 hardware drivers pre-installe
 
 | Config File | Image Name | Hardware | Desktop? | Marine? |
 |-------------|------------|----------|----------|---------|
-| `config.halos-halpi2` | Halos-Desktop-HALPI2 | HALPI2 | Yes | No |
-| `config.halos-lite-halpi2` | Halos-HALPI2 | HALPI2 | No | No |
-| `config.halos-marine-halpi2` | Halos-Desktop-Marine-HALPI2 | HALPI2 | Yes | Yes |
-| `config.halos-marine-lite-halpi2` | Halos-Marine-HALPI2 | HALPI2 | No | Yes |
-| `config.halos-rpi` | Halos-Desktop-RPI | Generic Pi | Yes | No |
-| `config.halos-lite-rpi` | Halos-RPI | Generic Pi | No | No |
-| `config.halos-marine-rpi` | Halos-Desktop-Marine-RPI | Generic Pi | Yes | Yes |
-| `config.halos-marine-lite-rpi` | Halos-Marine-RPI | Generic Pi | No | Yes |
+| `config.halos-desktop-halpi2` | Halos-Desktop-HALPI2 | HALPI2 | Yes | No |
+| `config.halos-halpi2` | Halos-HALPI2 | HALPI2 | No | No |
+| `config.halos-desktop-marine-halpi2` | Halos-Desktop-Marine-HALPI2 | HALPI2 | Yes | Yes |
+| `config.halos-marine-halpi2` | Halos-Marine-HALPI2 | HALPI2 | No | Yes |
+| `config.halos-desktop-rpi` | Halos-Desktop-RPI | Generic Pi | Yes | No |
+| `config.halos-rpi` | Halos-RPI | Generic Pi | No | No |
+| `config.halos-desktop-marine-rpi` | Halos-Desktop-Marine-RPI | Generic Pi | Yes | Yes |
+| `config.halos-marine-rpi` | Halos-Marine-RPI | Generic Pi | No | Yes |
 
 **Naming Convention:**
 - Headless (default): `Halos-[Marine-]<Hardware>`
@@ -278,7 +278,7 @@ CONTAINER_NAME="pigen_work_halos-desktop-marine-halpi2"
 
 Different image variants require different configuration approaches based on their intended use case and user interface.
 
-#### Headless Halos Variants (Recommended for Servers/Embedded)
+#### Headless Halos Variants
 
 **Applies to:** `Halos-HALPI2`, `Halos-Marine-HALPI2`, `Halos-RPI`, `Halos-Marine-RPI`
 

@@ -21,12 +21,12 @@ jobs:
       matrix:
         include:
           - name: Raspios-HALPI2
-            config: config.rpi-halpi2
+            config: config.raspios-halpi2
             release: trixie
             filename_prefix: raspios-halpi2
             enabled: false
           - name: Raspios-lite-HALPI2
-            config: config.rpi-lite-halpi2
+            config: config.raspios-lite-halpi2
             release: trixie
             filename_prefix: raspios-lite-halpi2
             enabled: false

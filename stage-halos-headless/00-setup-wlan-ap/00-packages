@@ -1,0 +1,3 @@
+# Packages needed for WiFi AP using NetworkManager
+# NetworkManager and iw should already be installed in Raspberry Pi OS
+# No additional packages required

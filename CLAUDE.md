@@ -2,6 +2,16 @@
 
 This repository builds HaLOS (Hat Labs Operating System) images using pi-gen. For the overall project architecture, see [../CLAUDE.md](../CLAUDE.md).
 
+**pi-gen Documentation:** https://raw.githubusercontent.com/RPi-Distro/pi-gen/refs/heads/master/README.md
+
+## Git Workflow Policy
+
+**IMPORTANT:** Always ask the user before:
+- Committing files to git
+- Pushing commits to remote repositories
+- Creating or modifying git tags
+- Running destructive git operations
+
 ## Project Overview
 
 HaLOS is a Raspberry Pi OS (Trixie) distribution with pre-installed Cockpit and CasaOS web management interfaces. This repository uses the official `pi-gen` image builder with custom stages to create HaLOS images for HALPI2 and generic Raspberry Pi hardware.
@@ -13,6 +23,18 @@ HaLOS is a Raspberry Pi OS (Trixie) distribution with pre-installed Cockpit and 
 - **HALPI2 support**: Hardware drivers for HALPI2
 
 **Not in this repository:** Legacy OpenPlotter and HALPI (CM4) images are maintained in the separate `openplotter-halpi` repository (Bookworm-based).
+
+## ⚠️ CRITICAL: Offline Operation Requirement
+
+**IMPORTANT:** HaLOS is designed for marine environments where **internet connectivity may NOT be available during first boot**.
+
+**Mandatory Requirements:**
+1. **All Docker images required for first boot MUST be pre-loaded** in the built image
+2. **No network connectivity can be assumed** on first boot
+3. **All core services must be operational** without internet access
+
+This currently applies to:
+- **CasaOS Docker image** (`dockurr/casa:X.Y.Z`) - required by casaos-docker-service package
 
 ## Image Variants
 

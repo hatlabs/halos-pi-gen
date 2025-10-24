@@ -1,7 +1,13 @@
 #!/bin/bash -e
 
-# This runs on the build host where Docker is available
-# Pre-pull the CasaOS Docker image and save it to the image
+# This script downloads Docker images without requiring the Docker daemon
+# Uses skopeo to pull images from Docker Hub and convert to docker-archive format
+
+# Check if skopeo is available
+if ! command -v skopeo &> /dev/null; then
+    echo "skopeo not found, installing..."
+    apt-get update && apt-get install -y skopeo
+fi
 
 # Extract version from the docker-compose.yml
 CASA_VERSION=$(grep 'image: dockurr/casa:' "${ROOTFS_DIR}/opt/casa/docker-compose.yml" | sed 's/.*dockurr\/casa://' | tr -d ' ')
@@ -11,22 +17,17 @@ if [ -z "$CASA_VERSION" ]; then
     exit 1
 fi
 
-# Check if Docker is available (it won't be in act's pi-gen container)
-# In CI builds, Docker will be available on the runner
-if ! command -v docker &> /dev/null; then
-    echo "Docker not available in build environment, skipping image pre-load"
-    echo "The image will be pulled on first boot instead"
-    echo "NOTE: CI builds with Docker available will pre-load the image for offline use"
-    exit 0
-fi
+echo "Downloading dockurr/casa:$CASA_VERSION using skopeo..."
 
-echo "Pre-pulling dockurr/casa:$CASA_VERSION image on build host..."
-
-# Pull the image on the build host
-docker pull "dockurr/casa:$CASA_VERSION"
-
-# Save the image as a tar file
+# Create output directory
 mkdir -p "${ROOTFS_DIR}/opt/casa/images"
-docker save "dockurr/casa:$CASA_VERSION" -o "${ROOTFS_DIR}/opt/casa/images/casa-${CASA_VERSION}.tar"
 
-echo "Successfully saved dockurr/casa:$CASA_VERSION to /opt/casa/images/"
+# Use skopeo to copy the image from Docker Hub to a docker-archive tar file
+# This works without the Docker daemon and creates a tar that 'docker load' can read
+skopeo copy \
+    --override-arch=arm64 \
+    docker://docker.io/dockurr/casa:${CASA_VERSION} \
+    docker-archive:${ROOTFS_DIR}/opt/casa/images/casa-${CASA_VERSION}.tar:dockurr/casa:${CASA_VERSION}
+
+echo "Successfully downloaded dockurr/casa:$CASA_VERSION to /opt/casa/images/"
+ls -lh "${ROOTFS_DIR}/opt/casa/images/"

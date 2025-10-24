@@ -224,23 +224,115 @@ Each image variant has a config file that defines:
 - `COMPRESSION_LEVEL`: Compression level (3 or 6)
 - `CONTAINER_NAME`: Docker container name
 
-Example `config.halos-marine-lite-halpi2` (headless marine):
+Example `config.halos-halpi2` (headless base):
 ```bash
-IMG_NAME="Halos-Marine-HALPI2"
-STAGE_LIST="stage0 stage1 stage2 stage-halos-base stage-halpi2-common stage-halos-marine"
+IMG_NAME="Halos-HALPI2"
+STAGE_LIST="stage-pre-halpi2-rpi stage0 stage1 stage2 stage-halpi2-common stage-halos-base stage-halpi2-rpi"
 DEPLOY_COMPRESSION="xz"
 COMPRESSION_LEVEL="6"
-CONTAINER_NAME="pigen_work_halos_marine_lite_halpi2"
+CONTAINER_NAME="pigen_work_halos-halpi2"
+FIRST_USER_NAME="pi"              # Pre-configured for headless access
+FIRST_USER_PASS="raspberry"       # Default password
+DISABLE_FIRST_BOOT_USER_RENAME="1" # Skip first-boot wizard
+TARGET_HOSTNAME="halpi2"
+WPA_COUNTRY="GB"
+ENABLE_SSH=1
 ```
 
-Example `config.halos-marine-halpi2` (desktop marine):
+Example `config.halos-desktop-halpi2` (desktop with first-boot wizard):
 ```bash
-IMG_NAME="Halos-Desktop-Marine-HALPI2"
-STAGE_LIST="stage0 stage1 stage2 stage-halos-base stage-halpi2-common stage3 stage-halos-marine stage-halpi2-rpi"
+IMG_NAME="Halos-Desktop-HALPI2"
+STAGE_LIST="stage-pre-halpi2-rpi stage0 stage1 stage2 stage3 stage4 stage-halpi2-common stage-halos-base stage-halpi2-rpi"
 DEPLOY_COMPRESSION="xz"
 COMPRESSION_LEVEL="6"
-CONTAINER_NAME="pigen_work_halos_marine_halpi2"
+CONTAINER_NAME="pigen_work_halos-desktop-halpi2"
+# No user configuration - uses first-boot wizard
 ```
+
+Example `config.halos-marine-halpi2` (headless marine):
+```bash
+IMG_NAME="Halos-Marine-HALPI2"
+STAGE_LIST="stage-pre-halpi2-rpi stage0 stage1 stage2 stage-halpi2-common stage-halos-base stage-halos-marine"
+DEPLOY_COMPRESSION="xz"
+COMPRESSION_LEVEL="6"
+CONTAINER_NAME="pigen_work_halos-marine-halpi2"
+FIRST_USER_NAME="pi"
+FIRST_USER_PASS="raspberry"
+DISABLE_FIRST_BOOT_USER_RENAME="1"
+TARGET_HOSTNAME="halpi2"
+WPA_COUNTRY="GB"
+ENABLE_SSH=1
+```
+
+Example `config.halos-desktop-marine-halpi2` (desktop marine):
+```bash
+IMG_NAME="Halos-Desktop-Marine-HALPI2"
+STAGE_LIST="stage-pre-halpi2-rpi stage0 stage1 stage2 stage3 stage4 stage-halpi2-common stage-halos-base stage-halos-marine stage-halpi2-rpi"
+DEPLOY_COMPRESSION="xz"
+COMPRESSION_LEVEL="6"
+CONTAINER_NAME="pigen_work_halos-desktop-marine-halpi2"
+# No user configuration - uses first-boot wizard
+```
+
+### Configuration Guidelines by Variant Type
+
+Different image variants require different configuration approaches based on their intended use case and user interface.
+
+#### Headless Halos Variants (Recommended for Servers/Embedded)
+
+**Applies to:** `Halos-HALPI2`, `Halos-Marine-HALPI2`, `Halos-RPI`, `Halos-Marine-RPI`
+
+**Philosophy:** Headless systems must be accessible over the network immediately after first boot without requiring physical access.
+
+**Required settings:**
+```bash
+FIRST_USER_NAME="pi"              # Default user for network access
+FIRST_USER_PASS="raspberry"       # Default password (user should change)
+DISABLE_FIRST_BOOT_USER_RENAME="1" # Skip first-boot wizard
+TARGET_HOSTNAME="halpi2"          # Predictable hostname for discovery
+WPA_COUNTRY="GB"                  # WiFi country code
+ENABLE_SSH=1                      # SSH enabled by default
+```
+
+**Security tradeoff:** These settings prioritize accessibility over security. Users can access the device immediately via:
+- SSH on predictable hostname
+- Known default credentials
+- Web interfaces (Cockpit on port 9090, CasaOS on port 80)
+
+**User responsibility:** Users must change the default password after first login.
+
+#### Desktop Halos Variants (First-Boot Wizard)
+
+**Applies to:** `Halos-Desktop-HALPI2`, `Halos-Desktop-Marine-HALPI2`, `Halos-Desktop-RPI`, `Halos-Desktop-Marine-RPI`
+
+**Philosophy:** Desktop environments have display/keyboard access, so use Raspberry Pi's first-boot wizard for secure setup.
+
+**Required settings:** None (follow upstream Raspberry Pi OS defaults)
+- Do NOT set `FIRST_USER_NAME` or `FIRST_USER_PASS`
+- Do NOT set `DISABLE_FIRST_BOOT_USER_RENAME`
+- User configures everything via GUI wizard on first boot
+
+**Security:** Follows Raspberry Pi OS best practices - user creates secure credentials during setup.
+
+#### Stock RaspiOS Variants (Follow Upstream)
+
+**Applies to:** `Raspios-HALPI2`, `Raspios-lite-HALPI2`
+
+**Philosophy:** Maintain compatibility with upstream Raspberry Pi OS practices.
+
+**Required settings:** None (follow upstream defaults)
+- Desktop variant: First-boot wizard
+- Lite variant: Depends on upstream Pi OS Lite defaults
+
+**Rationale:** Users choosing stock RaspiOS expect standard Raspberry Pi behavior.
+
+### Configuration Reference
+
+| Variant Type | Config Approach | User Creation | SSH | Security Level |
+|--------------|----------------|---------------|-----|----------------|
+| Halos headless | Pre-configured | Default pi/raspberry | Enabled | Lower (convenience) |
+| Halos desktop | First-boot wizard | User-chosen | User-chosen | Higher (secure) |
+| RaspiOS | Upstream defaults | Depends on variant | Depends | Upstream |
 
 ### CI/CD Workflows
 

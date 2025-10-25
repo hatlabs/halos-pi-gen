@@ -12,6 +12,12 @@ This repository builds Halos (Hat Labs Operating System) images using pi-gen.
 - Creating or modifying git tags
 - Running destructive git operations
 
+**Branch Workflow:**
+- **NEVER push directly to main** - Always create a branch and PR
+- Create feature branches for changes
+- Push feature branches and create PRs
+- Only merge to main via approved PRs
+
 ## Project Overview
 
 Halos is a Raspberry Pi OS (Trixie) distribution with pre-installed Cockpit and Runtipi web management interfaces. This repository uses the official `pi-gen` image builder with custom stages to create Halos images for HALPI2 and generic Raspberry Pi hardware.

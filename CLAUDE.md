@@ -14,7 +14,7 @@ This repository builds Halos (Hat Labs Operating System) images using pi-gen.
 
 ## Project Overview
 
-Halos is a Raspberry Pi OS (Trixie) distribution with pre-installed Cockpit and CasaOS web management interfaces. This repository uses the official `pi-gen` image builder with custom stages to create Halos images for HALPI2 and generic Raspberry Pi hardware.
+Halos is a Raspberry Pi OS (Trixie) distribution with pre-installed Cockpit and Runtipi web management interfaces. This repository uses the official `pi-gen` image builder with custom stages to create Halos images for HALPI2 and generic Raspberry Pi hardware.
 
 **Not in this repository:** Legacy OpenPlotter and HALPI (CM4) images are maintained in the separate `openplotter-halpi` repository (Bookworm-based).
 
@@ -28,7 +28,11 @@ Halos is a Raspberry Pi OS (Trixie) distribution with pre-installed Cockpit and 
 3. **All core services must be operational** without internet access
 
 This currently applies to:
-- **CasaOS Docker image** (`dockurr/casa:X.Y.Z`) - required by casaos-docker-service package
+- **Runtipi Docker images** - required by runtipi-docker-service package:
+  - `ghcr.io/runtipi/runtipi:vX.Y.Z`
+  - `traefik:vX.Y`
+  - `postgres:14`
+  - `cloudamqp/lavinmq:latest`
 
 ## Image Variants
 
@@ -72,7 +76,7 @@ Pi-gen uses a stage-based system where each stage adds functionality. Stages run
 **Standard Pi-Gen Stages:** stage0 (bootstrap) → stage1 (base) → stage2 (lite) → stage3 (desktop) → stage4+ (full)
 
 **Custom Halos Stages:**
-- **stage-halos-base/**: Install Cockpit and CasaOS (all Halos variants)
+- **stage-halos-base/**: Install Cockpit and Runtipi (all Halos variants)
 - **stage-halpi2-common/**: HALPI2 hardware support (APT repo, drivers, CAN/RS485/I2C)
 - **stage-halos-marine/**: Marine software stack (Signal K, InfluxDB, Grafana)
 - **stage-halpi2-rpi/**: HALPI2 desktop customizations (wallpaper, VNC)
@@ -137,7 +141,7 @@ Custom packages are built in separate repositories and published to apt.hatlabs.
 
 - **Base OS**: Debian-based Raspberry Pi OS (arm64, trixie)
 - **Build System**: pi-gen (official Raspberry Pi image builder)
-- **Web Management**: Cockpit (system admin), CasaOS (container/app management)
+- **Web Management**: Cockpit (system admin), Runtipi (container/app management)
 - **Containers**: Docker + Docker Compose
 - **Marine Software**: Signal K, InfluxDB, Grafana
 - **Hardware**: HALPI2 (CM5-based compute modules) and generic Raspberry Pi

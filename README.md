@@ -8,7 +8,7 @@ The built images include:
 - Raspios-lite-HALPI2: Headless Raspberry Pi OS with HALPI2 drivers
 - Raspios-HALPI2: Desktop Raspberry Pi OS with HALPI2 drivers
 
-**Halos Images** (Cockpit + CasaOS web management):
+**Halos Images** (Cockpit + Runtipi web management):
 - Halos-HALPI2: Headless for HALPI2 hardware
 - Halos-Desktop-HALPI2: Desktop for HALPI2 hardware
 - Halos-RPI: Headless for generic Raspberry Pi

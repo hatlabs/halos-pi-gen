@@ -34,36 +34,42 @@ Installs Cockpit web-based system administration interface.
 - Enables cockpit.socket service
 - Web UI available on port 9090 after first boot
 
-### 02-install-casaos
-Installs the CasaOS containerized service from the Hat Labs APT repository.
+### 02-install-runtipi
+Installs the Runtipi containerized service from the Hat Labs APT repository.
 
 **Packages installed:**
-- casaos-docker-service (from apt.hatlabs.fi)
+- runtipi-docker-service (from apt.hatlabs.fi)
 
 **What it does:**
-- Installs casaos-docker-service package
-- Creates /opt/casa directory (via package postinst)
-- Installs docker-compose.yml to /opt/casa/
-- Installs casaos.service systemd unit
-- Enables casaos.service for first boot
+- Installs runtipi-docker-service package
+- Creates /opt/runtipi directory structure (via package postinst)
+- Installs docker-compose.yml to /opt/runtipi/
+- Installs runtipi.service systemd unit
+- Enables runtipi.service for first boot
 - Stops service during build (will start on first boot)
 - Web UI available on port 80 after first boot
 
 ### 03-pull-images
-Pre-pulls Docker images required by CasaOS to enable offline first boot.
+Pre-pulls Docker images required by Runtipi to enable offline first boot.
 
 **What it does:**
-- Reads the image version from /opt/casa/docker-compose.yml
-- Pulls dockurr/casa image (version from docker-compose.yml)
-- Stores image in Docker's local cache
-- Ensures CasaOS can start without network connectivity
+- Reads image versions from /opt/runtipi/docker-compose.yml
+- Pulls required images:
+  - ghcr.io/runtipi/runtipi (version from docker-compose.yml)
+  - traefik (version from docker-compose.yml)
+  - postgres (version from docker-compose.yml)
+  - cloudamqp/lavinmq:latest
+- Stores images as tar archives in /opt/runtipi/images/
+- Creates systemd service to load images on first boot
+- Ensures Runtipi can start without network connectivity
 
 ## Services Enabled
 
 After this stage, the following services are enabled but not yet started:
 - **docker.service** - Docker daemon
 - **cockpit.socket** - Cockpit web interface (port 9090)
-- **casaos.service** - CasaOS container management (port 80)
+- **runtipi.service** - Runtipi container management (port 80)
+- **load-runtipi-images.service** - One-time service to load Docker images on first boot
 
 Services will start on first boot of the Halos system.
 
@@ -72,8 +78,12 @@ Services will start on first boot of the Halos system.
 This stage requires network connectivity during the build process to:
 - Download Docker CE packages from download.docker.com
 - Download Cockpit packages from Debian repositories
-- Download casaos-docker-service from apt.hatlabs.fi
-- Pull dockurr/casa Docker image from Docker Hub
+- Download runtipi-docker-service from apt.hatlabs.fi
+- Pull Runtipi Docker images:
+  - ghcr.io/runtipi/runtipi from GitHub Container Registry
+  - traefik from Docker Hub
+  - postgres from Docker Hub
+  - cloudamqp/lavinmq from Docker Hub
 
 After the build is complete, the system can boot and run without network connectivity since all required images are pre-pulled.
 

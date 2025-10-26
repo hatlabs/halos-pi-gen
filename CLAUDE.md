@@ -17,7 +17,8 @@ Builds HaLOS (Hat Labs Operating System) images using pi-gen for HALPI2 and gene
 - `config.halos-desktop-halpi2` → **Halos-Desktop-HALPI2**: Desktop HaLOS for HALPI2 hardware
 
 **HaLOS Marine Images** (adds Signal K, InfluxDB, Grafana):
-- `config.halos-marine-halpi2` → **Halos-Marine-HALPI2**: Desktop marine HaLOS for HALPI2
+- `config.halos-marine-halpi2` → **Halos-Marine-HALPI2**: Headless marine HaLOS for HALPI2
+- `config.halos-desktop-marine-halpi2` → **Halos-Desktop-Marine-HALPI2**: Desktop marine HaLOS for HALPI2
 
 ## Building Images
 

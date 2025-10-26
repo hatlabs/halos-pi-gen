@@ -11,14 +11,10 @@ The built images include:
 **Halos Images** (Cockpit + Runtipi web management):
 - Halos-HALPI2: Headless for HALPI2 hardware
 - Halos-Desktop-HALPI2: Desktop for HALPI2 hardware
-- Halos-RPI: Headless for generic Raspberry Pi
-- Halos-Desktop-RPI: Desktop for generic Raspberry Pi
 
 **Halos Marine Images** (adds Signal K, InfluxDB, Grafana):
 - Halos-Marine-HALPI2: Headless marine for HALPI2
 - Halos-Desktop-Marine-HALPI2: Desktop marine for HALPI2
-- Halos-Marine-RPI: Headless marine for generic Raspberry Pi
-- Halos-Desktop-Marine-RPI: Desktop marine for generic Raspberry Pi
 
 ## Downloading the Images
 

@@ -35,10 +35,20 @@ jobs:
             release: trixie
             filename_prefix: halos-halpi2
             enabled: true
+          - name: Halos-Desktop-HALPI2
+            config: config.halos-desktop-halpi2
+            release: trixie
+            filename_prefix: halos-desktop-halpi2
+            enabled: false
           - name: Halos-Marine-HALPI2
             config: config.halos-marine-halpi2
             release: trixie
             filename_prefix: halos-marine-halpi2
+            enabled: true
+          - name: Halos-Desktop-Marine-HALPI2
+            config: config.halos-desktop-marine-halpi2
+            release: trixie
+            filename_prefix: halos-desktop-marine-halpi2
             enabled: true
 
     steps:

@@ -1,0 +1,7 @@
+IMG_NAME="Halos-Desktop-Marine-HALPI2"
+IMG_DATE=$(date +%Y-%m-%dT%H_%M_%S)
+STAGE_LIST="stage-pre-halpi2-rpi stage0 stage1 stage2 stage3 stage4 stage-halpi2-common stage-halos-base stage-halos-marine stage-export"
+DEPLOY_COMPRESSION="xz"
+COMPRESSION_LEVEL=6
+CONTAINER_NAME="pigen_work_halos-desktop-marine-halpi2"
+TARGET_HOSTNAME="halos-marine"

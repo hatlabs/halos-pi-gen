@@ -35,6 +35,11 @@ jobs:
             release: trixie
             filename_prefix: halos-halpi2
             enabled: true
+          - name: Halos-Marine-HALPI2
+            config: config.halos-marine-halpi2
+            release: trixie
+            filename_prefix: halos-marine-halpi2
+            enabled: true
 
     steps:
       - name: ⬇ Checkout the halos repository

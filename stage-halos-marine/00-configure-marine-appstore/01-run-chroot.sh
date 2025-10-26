@@ -17,9 +17,9 @@ Requires=runtipi.service
 
 [Service]
 Type=oneshot
-# Wait for Runtipi to be ready
-ExecStartPre=/bin/bash -c 'for i in {1..60}; do docker exec runtipi-db pg_isready -U tipi 2>/dev/null && break || sleep 2; done; if ! docker exec runtipi-db pg_isready -U tipi 2>/dev/null; then echo "ERROR: PostgreSQL did not become ready after 120 seconds" >&2; exit 1; fi'
-ExecStartPre=/bin/sleep 10
+# Wait for Runtipi to be fully initialized (web interface responding)
+ExecStartPre=/bin/bash -c 'for i in {1..60}; do curl -f http://localhost:80 >/dev/null 2>&1 && break || sleep 2; done'
+ExecStartPre=/bin/sleep 5
 # Add the marine app store using runtipi-cli
 ExecStart=/bin/bash -c 'cd /opt/runtipi && ./runtipi-cli appstore add "${MARINE_APPSTORE_NAME}" "${MARINE_APPSTORE_URL}" 2>&1 || { echo "ERROR: Failed to add Marine app store" >&2; exit 1; }'
 # Disable the service after successful execution

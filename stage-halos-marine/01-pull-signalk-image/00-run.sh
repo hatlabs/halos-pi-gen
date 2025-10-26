@@ -4,7 +4,7 @@
 # Pre-pull the Signal K Docker image using skopeo and save it to the image
 # Skopeo works without a Docker daemon, so it works in restricted build environments
 
-SIGNALK_IMAGE="docker://signalk/signalk-server:latest-24.x"
+SIGNALK_IMAGE="docker://signalk/signalk-server:v2.17.2-24.x"
 SIGNALK_IMAGE_NAME="signalk"
 
 # Install skopeo if not available

@@ -14,7 +14,7 @@ Configures the runtipi-marine-app-store as an additional app store in Runtipi.
 
 ### 01-pull-signalk-image
 Preloads the Signal K docker image into the system image.
-- Uses skopeo to pull `cr.signalk.io/signalk/signalk-server:latest-24.x`
+- Uses skopeo to pull `signalk/signalk-server:v2.17.2-24.x` (Docker Hub)
 - Saves image to `/opt/runtipi/images/signalk.tar`
 - Will be loaded on first boot by the existing `load-runtipi-images.service`
 - Makes Signal K installation instant (no download required)

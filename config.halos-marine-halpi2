@@ -1,6 +1,6 @@
 IMG_NAME="Halos-Marine-HALPI2"
 IMG_DATE=$(date +%Y-%m-%dT%H_%M_%S)
-STAGE_LIST="stage-pre-halpi2-rpi stage0 stage1 stage2 stage-halpi2-common stage-halos-base stage-halos-marine stage-halos-headless stage-export"
+STAGE_LIST="stage0 stage1 stage2 stage-halpi2-common stage-halos-base stage-halos-marine stage-halos-headless stage-export"
 DEPLOY_COMPRESSION="xz"
 COMPRESSION_LEVEL=6
 CONTAINER_NAME="pigen_work_halos-marine-halpi2"

@@ -1,6 +1,6 @@
 IMG_NAME="raspios-halpi2"
 IMG_DATE=$(date +%Y-%m-%dT%H_%M_%S)
-STAGE_LIST="stage-pre-halpi2-rpi stage0 stage1 stage2 stage3 stage4 stage-halpi2-common stage-halpi2-rpi stage-export"
+STAGE_LIST="stage0 stage1 stage2 stage3 stage4 stage-halpi2-common stage-halpi2-rpi stage-export"
 DEPLOY_COMPRESSION="xz"
 COMPRESSION_LEVEL=3
 CONTAINER_NAME="pigen_work_raspios-halpi2"

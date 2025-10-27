@@ -31,6 +31,8 @@ for i in {1..60}; do
     sleep 2
 done
 
+# Check if database is ready after waiting
+docker exec runtipi-db pg_isready -U tipi -d tipi >/dev/null 2>&1 || { echo 'Database failed to become ready'; exit 1; }
 # Additional wait to ensure database migrations are complete
 sleep 5
 

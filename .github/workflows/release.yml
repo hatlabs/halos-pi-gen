@@ -61,7 +61,7 @@ jobs:
             });
 
             // Find highest build number for today
-            const datePattern = new RegExp(`^${date}-(\\d+)$`);
+            const datePattern = new RegExp(`^v${date}-(\\d+)$`);
             let maxBuild = 0;
 
             for (const tag of tags.data) {
@@ -75,7 +75,7 @@ jobs:
             }
 
             const nextBuild = maxBuild + 1;
-            const newTag = `${date}-${nextBuild}`;
+            const newTag = `v${date}-${nextBuild}`;
 
             core.setOutput('tag', newTag);
             core.setOutput('date', date);

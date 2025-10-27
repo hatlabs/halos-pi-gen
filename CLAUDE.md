@@ -45,7 +45,7 @@ Pi-gen uses stages (run in order). Custom HaLOS stages:
 
 - **stage-halos-base**: Cockpit + Runtipi (all variants)
 - **stage-halpi2-common**: HALPI2 hardware drivers, firmware, interfaces
-- **stage-halos-marine**: Marine stack (Signal K, InfluxDB, Grafana)
+- **stage-halos-marine**: Marine stack (marine app store, preinstalled marine apps)
 
 **Files:** `stage-*/` directories contain numbered tasks (00-, 01-, 02-). Each task can have: `00-run.sh` (host), `01-run-chroot.sh` (chroot), `00-packages` (apt packages), `files/` (config files).
 

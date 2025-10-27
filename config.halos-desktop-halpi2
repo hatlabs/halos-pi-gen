@@ -4,4 +4,4 @@ STAGE_LIST="stage0 stage1 stage2 stage3 stage4 stage-halpi2-common stage-halos-b
 DEPLOY_COMPRESSION="xz"
 COMPRESSION_LEVEL=6
 CONTAINER_NAME="pigen_work_halos-desktop-halpi2"
-TARGET_HOSTNAME="halpi2"
+TARGET_HOSTNAME="halos"

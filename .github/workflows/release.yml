@@ -91,14 +91,23 @@ jobs:
               repo: context.repo.repo
             });
 
+            console.log(`Found ${releases.data.length} total releases`);
+
             for (const release of releases.data) {
-              if (release.draft) {
+              console.log(`Release: ${release.name || release.tag_name} - Draft: ${release.draft}, Published: ${!release.draft}`);
+
+              // Strict equality check and explicit verification
+              if (release.draft === true && release.prerelease === false) {
                 console.log(`Deleting draft release: ${release.name || release.tag_name || release.id}`);
                 await github.rest.repos.deleteRelease({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   release_id: release.id
                 });
+              } else if (release.draft === true) {
+                console.log(`Skipping prerelease draft: ${release.name || release.tag_name}`);
+              } else {
+                console.log(`Skipping published release: ${release.name || release.tag_name}`);
               }
             }
 

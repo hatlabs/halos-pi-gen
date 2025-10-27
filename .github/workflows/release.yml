@@ -45,9 +45,101 @@ jobs:
           merge-multiple: true
           run-id: ${{ steps.find_run.outputs.run_id }}
 
-      - name: Create draft GitHub Release
+      - name: 🏷️ Calculate next release tag
+        id: calc_tag
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+            // Get all tags matching today's date pattern
+            const tags = await github.rest.repos.listTags({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+
+            // Find highest build number for today
+            const datePattern = new RegExp(`^${date}-(\\d+)$`);
+            let maxBuild = 0;
+
+            for (const tag of tags.data) {
+              const match = tag.name.match(datePattern);
+              if (match) {
+                const buildNum = parseInt(match[1]);
+                if (buildNum > maxBuild) {
+                  maxBuild = buildNum;
+                }
+              }
+            }
+
+            const nextBuild = maxBuild + 1;
+            const newTag = `${date}-${nextBuild}`;
+
+            core.setOutput('tag', newTag);
+            core.setOutput('date', date);
+            core.setOutput('build', nextBuild);
+
+      - name: 🗑️ Delete existing draft releases
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            for (const release of releases.data) {
+              if (release.draft) {
+                console.log(`Deleting draft release: ${release.name || release.tag_name || release.id}`);
+                await github.rest.repos.deleteRelease({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  release_id: release.id
+                });
+              }
+            }
+
+      - name: 📋 Generate release notes
+        id: release_notes
+        run: |
+          cat > release_notes.md << 'EOF'
+          ## HaLOS Images - Build ${{ steps.calc_tag.outputs.build }}
+
+          Automated build from commit ${{ github.sha }}
+
+          ### Included Images
+
+          **HALPI2 Hardware Variants** (with HALPI2 drivers):
+          - Raspios-HALPI2
+          - Raspios-lite-HALPI2
+          - Halos-HALPI2
+          - Halos-Desktop-HALPI2
+          - Halos-Marine-HALPI2
+          - Halos-Desktop-Marine-HALPI2
+
+          **Generic Raspberry Pi Variants**:
+          - Halos-RPI
+          - Halos-Desktop-RPI
+          - Halos-Marine-RPI
+          - Halos-Desktop-Marine-RPI
+
+          ### Installation
+
+          Flash images using [Raspberry Pi Imager](https://www.raspberrypi.org/software/).
+
+          🤖 Generated with [Claude Code](https://claude.com/claude-code)
+          EOF
+          echo "notes_file=release_notes.md" >> $GITHUB_OUTPUT
+
+      - name: 📦 Create draft GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.calc_tag.outputs.tag }}
+          name: "HaLOS Images - ${{ steps.calc_tag.outputs.tag }}"
+          body_path: release_notes.md
           files: all-artifacts/*
           draft: true

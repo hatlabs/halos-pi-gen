@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# usage: ./run.sh command [argument ...]
+# usage: ./run command [argument ...]
 #
 # Commands used during development / CI.
 # Also, executable documentation for project dev practices.
@@ -25,132 +25,156 @@ if [[ $0 != $PROJECT_ROOT && $PROJECT_ROOT != "" ]]; then
 fi
 readonly PROJECT_ROOT=$(pwd)
 
-# Store the absolute path to this script (useful for recursion).
-readonly SCRIPT="$PROJECT_ROOT/$(basename "$0")"
-
 ################################################################################
-# Project-specific commands follow.
+# Build Commands
 
-function docker-build-all {
-  # Build all images in the matrix
-  # Usage: ./run docker-build-all [additional act options]
+function docker:build-all {
+  #@ Build all images in the matrix
+  #@ Category: Build
+  echo "🏗️ Building all images in the matrix..."
+
+  _require act docker gh
 
   # Clean up any existing pigen_work containers first
-  docker-clean
+  docker:clean
 
-  act \
-    pull_request \
-    -s GITHUB_TOKEN="$(gh auth token)" \
-    -P ubuntu-latest-arm64=catthehacker/ubuntu:act-latest \
-    --artifact-server-path $PWD/artifacts \
-    "$@"
+  _run_act
+
+  echo "✅ All builds completed successfully"
 }
 
-function docker-build {
-  # Build a specific image by job name
-  # Usage: ./run docker-build <job-name> [additional act options]
-  # Available job names:
-  #   - "Raspios-HALPI2"
-  #   - "Raspios-lite-HALPI2"
-  #   - "OpenPlotter-HALPI2" (when uncommented in workflow)
+function docker:build {
+  #@ Build a specific image by job name
+  #@ Category: Build
+
+  _require act docker gh yq
 
   if [ $# -lt 1 ]; then
-    echo "Error: Job name required"
-    echo "Usage: ./run docker-build <job-name>"
-    echo ""
-    echo "Available jobs:"
-    echo "  - Raspios-HALPI2"
-    echo "  - Raspios-lite-HALPI2"
-    echo "  - OpenPlotter-HALPI2"
+    echo "❌ Error: Job name required" >&2
+    echo "" >&2
+    echo "Usage: ./run docker:build <job-name> [additional act options]" >&2
+    echo "" >&2
+    echo "Available jobs:" >&2
+    _list_jobs >&2
     return 1
   fi
 
   local job_name="$1"
   shift
 
+  echo "🏗️ Building image: $job_name..."
+
   # Clean up any existing pigen_work containers first
-  docker-clean
+  docker:clean
+
+  _run_act --matrix "name:$job_name" "$@"
+
+  echo "✅ Build completed successfully"
+}
+
+function docker:clean {
+  #@ Remove pigen_work containers
+  #@ Category: Utilities
+
+  _require docker
+
+  local containers
+  containers=$(docker ps -a --filter "name=pigen_work" --format "{{.Names}}" 2>/dev/null || true)
+
+  if [ -n "$containers" ]; then
+    echo "🧹 Cleaning up pigen_work containers..."
+    # shellcheck disable=SC2086
+    docker rm -v $containers 2>/dev/null || true
+    echo "✅ Cleanup completed"
+  else
+    echo "ℹ️ No pigen_work containers to clean"
+  fi
+}
+
+################################################################################
+# Help System
+
+function help {
+  #@ Show this help message
+  #@ Category: Core
+  echo "Available commands:"
+  echo ""
+
+  # Extract function definitions and their help comments
+  awk '/^function / {
+    fname = $2
+    sub(/[({].*/, "", fname)
+    getline
+    if ($0 ~ /#@/) {
+      desc = $0
+      sub(/.*#@ /, "", desc)
+      sub(/ *$/, "", desc)
+      getline
+      if ($0 ~ /#@ Category:/) {
+        cat = $0
+        sub(/.*Category: /, "", cat)
+        sub(/ *$/, "", cat)
+        if (!seen[cat]++) categories[++cat_count] = cat
+        commands[cat, ++cmd_count[cat]] = fname
+        descriptions[cat, cmd_count[cat]] = desc
+      }
+    }
+  }
+  END {
+    for (i = 1; i <= cat_count; i++) {
+      cat = categories[i]
+      print "\n" cat ":"
+      for (j = 1; j <= cmd_count[cat]; j++) {
+        printf "  %-30s %s\n", commands[cat, j], descriptions[cat, j]
+      }
+    }
+  }' "$0"
+
+  echo ""
+  echo "Usage: ./run <command> [arguments...]"
+}
+
+################################################################################
+# Internal Utilities
+
+function _run_act {
+  # Run act with common configuration
+  # Usage: _run_act [--matrix "name:value"] [additional options...]
 
   act \
     pull_request \
     -s GITHUB_TOKEN="$(gh auth token)" \
     -P ubuntu-latest-arm64=catthehacker/ubuntu:act-latest \
-    --artifact-server-path $PWD/artifacts \
-    --matrix "name:$job_name" \
+    --artifact-server-path "$PWD/artifacts" \
     "$@"
 }
 
-function docker-clean {
-  docker rm -v $(docker ps -a --filter "name=pigen_work" --format "{{.Names}}") 2>/dev/null || true
-}
+function _require {
+  # Check if required commands are available
+  # Usage: _require <command> [command...]
 
-################################################################################
-# Meta-commands and utilities follow.
-
-function help {
-  # list all "public" functions (those not beginning with an underscore)
-  # defined in this file
-  printf "%s <task> [args]\n\nTasks:\n" "${0}"
-  compgen -A function | grep -v "^_" | cat -n
-
-  printf "\nExtended help:\n  Each task has comments for general usage\n"
-}
-
-once_hash_array=()
-function _once {
-  # Run a command only once during the execution of this script, even if it's
-  # called multiple times.
-  #
-  # Usage:
-  #   _once <command> [argument ...]
-  #
-  # Example:
-  #   _once echo "Hello"
-  #   _once echo "Hello"  # won't be executed
-
-  local command="$*"
-  local hash=$(echo "$command" | shasum | cut -d' ' -f1)
-  if [[ ! " ${once_hash_array[@]} " =~ " ${hash} " ]]; then
-    once_hash_array+=("$hash")
-    eval "$command"
-  fi
-}
-
-function _env {
-  echo "🗝️ Setting environment from .env and .env.defaults"
-  # Go through the files and export all variables not already present in
-  # the environment. First file has precedence!
-  if [ -f .env ]; then
-    _export_unset .env
-  else
-    # Make sure a .env file exists, otherwise docker-compose will complain
-    cp .env.defaults .env
-  fi
-  _export_unset .env.defaults
-}
-
-function _export_unset {
-  local file="$1"
-
-  # Need to use a temp file to avoid a subshell
-  local tmpfile=$(mktemp)
-  grep -v '^#' $file >$tmpfile
-
-  while read -r line; do
-    if [[ ! "$line" =~ ^[[:space:]]*$ ]]; then
-      varname=$(echo "$line" | cut -d= -f1)
-      if [[ -z "${!varname:-}" ]]; then
-        eval $line
-        export $varname
-      fi
+  for cmd in "$@"; do
+    if ! command -v "$cmd" &>/dev/null; then
+      echo "❌ Error: required command '$cmd' not found" >&2
+      return 1
     fi
-  done <$tmpfile
-  rm $tmpfile
+  done
 }
 
-function _test_export_unset {
-  _export_unset .env
-  env | sort
+function _list_jobs {
+  # List available job names from workflow file
+  # Extracts matrix.include[].name from .github/workflows/pull_request.yml
+
+  local workflow=".github/workflows/pull_request.yml"
+
+  if [ ! -f "$workflow" ]; then
+    echo "  (workflow file not found)" >&2
+    return 1
+  fi
+
+  yq eval '.jobs.image-builder.strategy.matrix.include[].name' "$workflow" 2>/dev/null | while read -r job; do
+    echo "  - $job"
+  done
 }
 
 ################################################################################

@@ -35,7 +35,7 @@ Signal K is **not** automatically installed. After first boot:
 This stage is included in the `config.halos-marine-halpi2` variant.
 
 ```bash
-./run docker-build "HaLOS-Marine-HALPI2"
+./run docker:build "HaLOS-Marine-HALPI2"
 ```
 
 ## Dependencies

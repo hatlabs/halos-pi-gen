@@ -31,7 +31,7 @@ The image can be built manually using the [act](https://nektosact.com/) GitHub A
 With the prerequisites in place, run the following commands to build the image:
 
 ```bash
-./run docker-build
+./run docker:build
 ```
 
 This command will mimic the GitHub Actions workflow and build the images locally. The image files are stored in the `artifacts` directory. All artifacts are zip files that can be extracted to get the `xz` compressed image files. The image can then be flashed to an SSD drive or SD card using the Raspberry Pi Imager as described above.

@@ -24,13 +24,13 @@ Builds HaLOS (Hat Labs Operating System) images using pi-gen for HALPI2 and gene
 
 ```bash
 # Build specific variant
-./run docker-build "Halos-Marine-HALPI2"
+./run docker:build "Halos-Marine-HALPI2"
 
 # Build all enabled variants
-./run docker-build-all
+./run docker:build-all
 
 # Clean up
-./run docker-clean
+./run docker:clean
 ```
 
 ## Stage System

@@ -1,20 +1,26 @@
-# HALPI2 OS Images
+# HaLOS Images
 
-Raspberry Pi OS images customized for the HALPI2 hardware.
+Raspberry Pi OS images for HALPI2 hardware and generic Raspberry Pi.
 
 The built images include:
 
-**Stock Raspberry Pi OS (HALPI2-customized):**
-- Raspios-lite-HALPI2: Headless Raspberry Pi OS with HALPI2 drivers
-- Raspios-HALPI2: Desktop Raspberry Pi OS with HALPI2 drivers
+### Stock Raspberry Pi OS (HALPI2-customized)
+- **Raspios-lite-HALPI2**: Headless Raspberry Pi OS with HALPI2 drivers
+- **Raspios-HALPI2**: Desktop Raspberry Pi OS with HALPI2 drivers
 
-**Halos Images** (Cockpit + Runtipi web management):
-- Halos-HALPI2: Headless for HALPI2 hardware
-- Halos-Desktop-HALPI2: Desktop for HALPI2 hardware
+### HaLOS for HALPI2 Hardware
+Cockpit + Runtipi web management + HALPI2-specific drivers:
+- **Halos-HALPI2**: Headless HaLOS for HALPI2
+- **Halos-Desktop-HALPI2**: Desktop HaLOS for HALPI2
+- **Halos-Marine-HALPI2**: Headless marine HaLOS for HALPI2 (adds marine software)
+- **Halos-Desktop-Marine-HALPI2**: Desktop marine HaLOS for HALPI2 (adds marine software)
 
-**Halos Marine Images** (adds Signal K, InfluxDB, Grafana):
-- Halos-Marine-HALPI2: Headless marine for HALPI2
-- Halos-Desktop-Marine-HALPI2: Desktop marine for HALPI2
+### HaLOS for Generic Raspberry Pi
+Cockpit + Runtipi web management (no HALPI2-specific drivers):
+- **Halos-RPI**: Headless HaLOS for generic RPi
+- **Halos-Desktop-RPI**: Desktop HaLOS for generic RPi
+- **Halos-Marine-RPI**: Headless marine HaLOS for generic RPi (adds marine software)
+- **Halos-Desktop-Marine-RPI**: Desktop marine HaLOS for generic RPi (adds marine software)
 
 ## Downloading the Images
 

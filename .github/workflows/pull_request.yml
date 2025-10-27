@@ -17,19 +17,18 @@ jobs:
     runs-on: ubuntu-latest-arm64
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         include:
           - name: Raspios-HALPI2
             config: config.raspios-halpi2
             release: trixie
             filename_prefix: raspios-halpi2
-            enabled: false
+            enabled: true
           - name: Raspios-lite-HALPI2
             config: config.raspios-lite-halpi2
             release: trixie
             filename_prefix: raspios-lite-halpi2
-            enabled: false
+            enabled: true
           - name: Halos-HALPI2
             config: config.halos-halpi2
             release: trixie
@@ -39,7 +38,7 @@ jobs:
             config: config.halos-desktop-halpi2
             release: trixie
             filename_prefix: halos-desktop-halpi2
-            enabled: false
+            enabled: true
           - name: Halos-Marine-HALPI2
             config: config.halos-marine-halpi2
             release: trixie
@@ -49,6 +48,26 @@ jobs:
             config: config.halos-desktop-marine-halpi2
             release: trixie
             filename_prefix: halos-desktop-marine-halpi2
+            enabled: true
+          - name: Halos-RPI
+            config: config.halos-rpi
+            release: trixie
+            filename_prefix: halos-rpi
+            enabled: true
+          - name: Halos-Desktop-RPI
+            config: config.halos-desktop-rpi
+            release: trixie
+            filename_prefix: halos-desktop-rpi
+            enabled: true
+          - name: Halos-Marine-RPI
+            config: config.halos-marine-rpi
+            release: trixie
+            filename_prefix: halos-marine-rpi
+            enabled: true
+          - name: Halos-Desktop-Marine-RPI
+            config: config.halos-desktop-marine-rpi
+            release: trixie
+            filename_prefix: halos-desktop-marine-rpi
             enabled: true
 
     steps:

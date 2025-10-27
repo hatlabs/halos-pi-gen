@@ -8,17 +8,23 @@ Builds HaLOS (Hat Labs Operating System) images using pi-gen for HALPI2 and gene
 
 ## Image Variants
 
-**Stock Raspberry Pi OS (HALPI2-customized):**
+### Stock Raspberry Pi OS (HALPI2-customized)
 - `config.raspios-lite-halpi2` → **raspios-lite-halpi2**: Headless Raspberry Pi OS with HALPI2 drivers
 - `config.raspios-halpi2` → **raspios-halpi2**: Desktop Raspberry Pi OS with HALPI2 drivers
 
-**HaLOS Images** (Cockpit + Runtipi web management):
-- `config.halos-halpi2` → **Halos-HALPI2**: Headless HaLOS for HALPI2 hardware
-- `config.halos-desktop-halpi2` → **Halos-Desktop-HALPI2**: Desktop HaLOS for HALPI2 hardware
-
-**HaLOS Marine Images** (adds Signal K, InfluxDB, Grafana):
+### HaLOS for HALPI2 Hardware
+Cockpit + Runtipi web management + HALPI2 drivers:
+- `config.halos-halpi2` → **Halos-HALPI2**: Headless HaLOS for HALPI2
+- `config.halos-desktop-halpi2` → **Halos-Desktop-HALPI2**: Desktop HaLOS for HALPI2
 - `config.halos-marine-halpi2` → **Halos-Marine-HALPI2**: Headless marine HaLOS for HALPI2
 - `config.halos-desktop-marine-halpi2` → **Halos-Desktop-Marine-HALPI2**: Desktop marine HaLOS for HALPI2
+
+### HaLOS for Generic Raspberry Pi
+Cockpit + Runtipi web management (no HALPI2-specific drivers):
+- `config.halos-rpi` → **Halos-RPI**: Headless HaLOS for generic RPi
+- `config.halos-desktop-rpi` → **Halos-Desktop-RPI**: Desktop HaLOS for generic RPi
+- `config.halos-marine-rpi` → **Halos-Marine-RPI**: Headless marine HaLOS for generic RPi
+- `config.halos-desktop-marine-rpi` → **Halos-Desktop-Marine-RPI**: Desktop marine HaLOS for generic RPi
 
 ## Building Images
 

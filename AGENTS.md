@@ -17,14 +17,14 @@ Builds HaLOS (Hat Labs Operating System) images using pi-gen for HALPI2 and gene
 - `config.raspios-halpi2` → **raspios-halpi2**: Desktop Raspberry Pi OS with HALPI2 drivers
 
 ### HaLOS for HALPI2 Hardware
-Cockpit + Runtipi web management + HALPI2 drivers:
+Cockpit web management + HALPI2 drivers:
 - `config.halos-halpi2` → **Halos-HALPI2**: Headless HaLOS for HALPI2
 - `config.halos-desktop-halpi2` → **Halos-Desktop-HALPI2**: Desktop HaLOS for HALPI2
 - `config.halos-marine-halpi2` → **Halos-Marine-HALPI2**: Headless marine HaLOS for HALPI2
 - `config.halos-desktop-marine-halpi2` → **Halos-Desktop-Marine-HALPI2**: Desktop marine HaLOS for HALPI2
 
 ### HaLOS for Generic Raspberry Pi
-Cockpit + Runtipi web management (no HALPI2-specific drivers):
+Cockpit web management (no HALPI2-specific drivers):
 - `config.halos-rpi` → **Halos-RPI**: Headless HaLOS for generic RPi
 - `config.halos-desktop-rpi` → **Halos-Desktop-RPI**: Desktop HaLOS for generic RPi
 - `config.halos-marine-rpi` → **Halos-Marine-RPI**: Headless marine HaLOS for generic RPi
@@ -47,7 +47,7 @@ Cockpit + Runtipi web management (no HALPI2-specific drivers):
 
 Pi-gen uses stages (run in order). Custom HaLOS stages:
 
-- **stage-halos-base**: Cockpit + Runtipi (all variants)
+- **stage-halos-base**: Cockpit + Docker (all variants)
 - **stage-halpi2-common**: HALPI2 hardware drivers, firmware, interfaces
 - **stage-halos-marine**: Marine stack (marine app store, preinstalled marine apps)
 
@@ -67,6 +67,5 @@ STAGE_LIST="stage0 stage1 stage2 stage-halos-base stage-halpi2-common stage3 sta
 ## Related
 
 - **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Runtipi**: [../runtipi-docker-service/AGENTS.md](../runtipi-docker-service/AGENTS.md)
-- **Marine apps**: [../runtipi-marine-app-store/AGENTS.md](../runtipi-marine-app-store/AGENTS.md)
+- **Marine containers**: [../halos-marine-containers/AGENTS.md](../halos-marine-containers/AGENTS.md)
 - **Legacy images**: `openplotter-halpi` repository (Bookworm)

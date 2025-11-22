@@ -1,11 +1,9 @@
 #!/bin/bash -e
 
 # Install logo files
-install -m 644 files/runtipi-logo.png "${ROOTFS_DIR}/usr/share/pixmaps/"
 install -m 644 files/cockpit-logo.png "${ROOTFS_DIR}/usr/share/pixmaps/"
 
 # Install desktop launchers to system applications directory
-install -m 644 files/runtipi.desktop "${ROOTFS_DIR}/usr/share/applications/"
 install -m 644 files/cockpit.desktop "${ROOTFS_DIR}/usr/share/applications/"
 
 # Create user's wf-panel-pi config directory
@@ -19,10 +17,10 @@ if [ -f "${PANEL_CONFIG}" ]; then
     # File exists, validate and update launchers line
     if grep -Eq '^[[:space:]]*launchers[[:space:]]*=' "${PANEL_CONFIG}"; then
         # Update the launchers line, allowing for spaces around '='
-        sed -i -E 's/^([[:space:]]*launchers[[:space:]]*=[[:space:]]*)(.*)$/\1\2 cockpit runtipi/' "${PANEL_CONFIG}"
+        sed -i -E 's/^([[:space:]]*launchers[[:space:]]*=[[:space:]]*)(.*)$/\1\2 cockpit/' "${PANEL_CONFIG}"
     else
         # Add launchers line if it does not exist
-        echo "launchers=cockpit runtipi" >> "${PANEL_CONFIG}"
+        echo "launchers=cockpit" >> "${PANEL_CONFIG}"
     fi
 else
     # File doesn't exist, install default configuration

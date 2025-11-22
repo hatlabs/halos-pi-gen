@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Runtipi
-Comment=HaLOS App Store
-Icon=/usr/share/pixmaps/runtipi-logo.png
-Exec=xdg-open http://localhost/
-Terminal=false
-Categories=System;Settings;

@@ -2,6 +2,8 @@
 Description=Restrict preconfigured WiFi to wlan0 for STA+AP mode
 # Run before NetworkManager reads connection files
 Before=NetworkManager.service
+# Ensure filesystem is ready
+After=local-fs.target
 # Only if NetworkManager is installed
 ConditionPathExists=/usr/sbin/NetworkManager
 

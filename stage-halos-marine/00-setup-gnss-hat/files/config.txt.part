@@ -1,0 +1,4 @@
+[all]
+
+# Enable UART0 for MAX-M8Q GNSS HAT
+dtparam=uart0=on

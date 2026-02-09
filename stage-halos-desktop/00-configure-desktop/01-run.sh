@@ -1,30 +1,5 @@
 #!/bin/bash -e
 
-# Copy desktop launchers to user's Desktop directory
-# The .desktop files are installed to /usr/share/applications/ by packages
-# (halos-cockpit-branding, halos-homarr-branding)
-
-# Create Desktop directory
-install -v -o 1000 -g 1000 -d "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/Desktop"
-
-# List of desktop files to copy
-DESKTOP_FILES=(
-    "cockpit.desktop"
-    "homarr.desktop"
-)
-
-for desktop_file in "${DESKTOP_FILES[@]}"; do
-    src="${ROOTFS_DIR}/usr/share/applications/${desktop_file}"
-    dst="${ROOTFS_DIR}/home/${FIRST_USER_NAME}/Desktop/${desktop_file}"
-
-    if [ -f "${src}" ]; then
-        echo "Copying ${desktop_file} to Desktop"
-        install -m 644 -o 1000 -g 1000 "${src}" "${dst}"
-    else
-        echo "Warning: ${desktop_file} not found in /usr/share/applications/"
-    fi
-done
-
 # Create user's wf-panel-pi config directory
 install -v -o 1000 -g 1000 -d "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/.config"
 install -v -o 1000 -g 1000 -d "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/.config/wf-panel-pi"

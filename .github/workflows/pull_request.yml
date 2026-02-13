@@ -49,6 +49,11 @@ jobs:
             release: trixie
             filename_prefix: halos-desktop-marine-halpi2
             enabled: true
+          - name: Halos-Desktop-Marine-HALPI2-AP
+            config: config.halos-desktop-marine-halpi2-ap
+            release: trixie
+            filename_prefix: halos-desktop-marine-halpi2-ap
+            enabled: true
           - name: Halos-RPI
             config: config.halos-rpi
             release: trixie

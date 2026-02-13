@@ -100,12 +100,10 @@ function bumpversion {
   local today new_version current
   today=$(date +%Y-%m-%d)
   current=$(cat VERSION 2>/dev/null || echo "")
-  if [[ "$current" == "$today" ]]; then
-    new_version="${today}.2"
-  elif [[ "$current" =~ ^${today}\.([0-9]+)$ ]]; then
+  if [[ "$current" =~ ^${today}\.([0-9]+)$ ]]; then
     new_version="${today}.$(( ${BASH_REMATCH[1]} + 1 ))"
   else
-    new_version="$today"
+    new_version="${today}.0"
   fi
   echo "$new_version" > VERSION
   git add VERSION

@@ -164,7 +164,7 @@ function _run_act {
   # Usage: _run_act [--matrix "name:value"] [additional options...]
 
   act \
-    pull_request \
+    push \
     -s GITHUB_TOKEN="$(gh auth token)" \
     -P ubuntu-latest-arm64=catthehacker/ubuntu:act-latest \
     --artifact-server-path "$PWD/artifacts" \
@@ -185,9 +185,9 @@ function _require {
 
 function _list_jobs {
   # List available job names from workflow file
-  # Extracts matrix.include[].name from .github/workflows/pull_request.yml
+  # Extracts matrix.include[].name from .github/workflows/main.yml
 
-  local workflow=".github/workflows/pull_request.yml"
+  local workflow=".github/workflows/main.yml"
 
   if [ ! -f "$workflow" ]; then
     echo "  (workflow file not found)" >&2

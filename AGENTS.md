@@ -62,8 +62,8 @@ STAGE_LIST="stage0 stage1 stage2 stage-halos-base stage-halpi2-common stage3 sta
 
 ## CI/CD
 
-- **`.github/workflows/pull_request.yml`**: Builds on PRs (ARM64 runners)
-- **`.github/workflows/release.yml`**: Creates releases with artifacts
+- **`.github/workflows/pr.yml`**: Lightweight PR checks via shared workflow (shellcheck, stage/config validation)
+- **`.github/workflows/main.yml`**: Builds all image variants on push to main, then creates a draft GitHub release
 
 ## Related
 

@@ -1,7 +1,46 @@
 name: Run tests
-description: No-op test action for image builder repository
+description: Validate pi-gen stage tree and config files
 runs:
   using: composite
   steps:
-    - run: echo "No tests for image builder"
+    - name: Install shellcheck
+      run: sudo apt-get update && sudo apt-get install -y shellcheck
+      shell: bash
+
+    - name: Shellcheck stage scripts
+      run: |
+        shopt -s globstar nullglob
+        scripts=(stage-*/**/*.sh)
+        if [ ${#scripts[@]} -eq 0 ]; then
+          echo "No shell scripts found"
+          exit 0
+        fi
+        echo "Checking ${#scripts[@]} scripts..."
+        shellcheck "${scripts[@]}"
+      shell: bash
+
+    - name: Validate stage references in configs
+      run: |
+        exit_code=0
+        for config in config.*; do
+          stage_list=$(bash -c "source $config 2>/dev/null; echo \$STAGE_LIST")
+          for stage in $stage_list; do
+            if [[ "$stage" == stage-* ]] && [ ! -d "$stage" ]; then
+              echo "ERROR: $config references non-existent stage '$stage'"
+              exit_code=1
+            fi
+          done
+        done
+        exit $exit_code
+      shell: bash
+
+    - name: Validate config syntax
+      run: |
+        for config in config.*; do
+          if ! bash -n "$config" 2>&1; then
+            echo "ERROR: $config has syntax errors"
+            exit 1
+          fi
+        done
+        echo "All configs have valid syntax"
       shell: bash

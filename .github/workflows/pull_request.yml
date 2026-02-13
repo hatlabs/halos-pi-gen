@@ -93,20 +93,20 @@ jobs:
         id: prep
         run: |
           sudo apt-get update && sudo apt-get install -y coreutils quilt parted qemu-utils qemu-user-static debootstrap zerofree zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc kmod kpartx arch-test xxd pigz
-          ISODATE=$(date +%Y-%m-%d)
-          echo "ISODATE=$ISODATE" >> $GITHUB_ENV
-          IMG_FILENAME="${{ matrix.filename_prefix }}_${{ matrix.release }}_${ISODATE}"
+          HALOS_VERSION=$(cat VERSION)
+          IMG_FILENAME="${{ matrix.filename_prefix }}_${{ matrix.release }}_${HALOS_VERSION}"
           echo "IMG_FILENAME=$IMG_FILENAME" >> $GITHUB_ENV
 
       - name: 👷 Build
         if: matrix.enabled != false
         run: |
+          cp VERSION pi-gen/VERSION
           cp -R stage-* pi-gen/
           touch pi-gen/stage5/SKIP
           touch pi-gen/stage{2,4}/SKIP_IMAGES
           cp ${{ matrix.config }} pi-gen/config
           cd pi-gen
-          sudo RELEASE='${{ matrix.release }}' IMG_FILENAME=${{ env.IMG_FILENAME }} ARCHIVE_FILENAME=${{ env.IMG_FILENAME }} ./build-docker.sh
+          sudo RELEASE='${{ matrix.release }}' GIT_HASH=${{ github.sha }} IMG_FILENAME=${{ env.IMG_FILENAME }} ARCHIVE_FILENAME=${{ env.IMG_FILENAME }} ./build-docker.sh
 
       - name: 📦 Upload
         if: matrix.enabled != false

@@ -92,6 +92,28 @@ function docker:clean {
 }
 
 ################################################################################
+# Version Commands
+
+function bumpversion {
+  #@ Set version to today's date and commit
+  #@ Category: Version
+  local today new_version current
+  today=$(date +%Y-%m-%d)
+  current=$(cat VERSION 2>/dev/null || echo "")
+  if [[ "$current" == "$today" ]]; then
+    new_version="${today}.2"
+  elif [[ "$current" =~ ^${today}\.([0-9]+)$ ]]; then
+    new_version="${today}.$(( ${BASH_REMATCH[1]} + 1 ))"
+  else
+    new_version="$today"
+  fi
+  echo "$new_version" > VERSION
+  git add VERSION
+  git commit -m "chore: bump version to ${new_version}"
+  echo "Version bumped to ${new_version}"
+}
+
+################################################################################
 # Help System
 
 function help {

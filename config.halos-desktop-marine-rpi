@@ -1,5 +1,7 @@
 IMG_NAME="Halos-Desktop-Marine-RPI"
-IMG_DATE=$(date +%Y-%m-%dT%H_%M_%S)
+PI_GEN_RELEASE="HaLOS Desktop Marine RPI"
+PI_GEN_REPO="https://github.com/hatlabs/halos-pi-gen"
+IMG_DATE=$(cat VERSION)
 STAGE_LIST="stage0 stage1 stage2 stage3 stage4 stage-common stage-halos-base stage-halos-marine stage-halos-desktop stage-export"
 DEPLOY_COMPRESSION="xz"
 COMPRESSION_LEVEL=6

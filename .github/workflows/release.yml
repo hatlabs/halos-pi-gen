@@ -51,17 +51,18 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            const fs = require('fs');
+            const version = fs.readFileSync('VERSION', 'utf8').trim();
 
-            // Get all tags matching today's date pattern
+            // Get all tags matching this version's pattern
             const tags = await github.rest.repos.listTags({
               owner: context.repo.owner,
               repo: context.repo.repo,
               per_page: 100
             });
 
-            // Find highest build number for today
-            const datePattern = new RegExp(`^v${date}-(\\d+)$`);
+            // Find highest build number for this version
+            const datePattern = new RegExp(`^v${version.replace(/\./g, '\\.')}-(\\d+)$`);
             let maxBuild = 0;
 
             for (const tag of tags.data) {
@@ -75,10 +76,10 @@ jobs:
             }
 
             const nextBuild = maxBuild + 1;
-            const newTag = `v${date}-${nextBuild}`;
+            const newTag = `v${version}-${nextBuild}`;
 
             core.setOutput('tag', newTag);
-            core.setOutput('date', date);
+            core.setOutput('version', version);
             core.setOutput('build', nextBuild);
 
       - name: 🗑️ Delete existing draft releases

@@ -1,5 +1,5 @@
 IMG_NAME="Raspios-Lite-HALPI2"
-IMG_DATE=$(date +%Y-%m-%dT%H_%M_%S)
+IMG_DATE=$(cat VERSION)
 STAGE_LIST="stage0 stage1 stage2 stage-common stage-halpi2-common stage-halpi2-rpi-lite stage-export"
 DEPLOY_COMPRESSION="xz"
 COMPRESSION_LEVEL=3

@@ -1,0 +1,7 @@
+name: Run tests
+description: No-op test action for image builder repository
+runs:
+  using: composite
+  steps:
+    - run: echo "No tests for image builder"
+      shell: bash

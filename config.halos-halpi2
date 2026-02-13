@@ -1,5 +1,7 @@
 IMG_NAME="Halos-HALPI2"
-IMG_DATE=$(date +%Y-%m-%dT%H_%M_%S)
+PI_GEN_RELEASE="HaLOS HALPI2"
+PI_GEN_REPO="https://github.com/hatlabs/halos-pi-gen"
+IMG_DATE=$(cat VERSION)
 STAGE_LIST="stage0 stage1 stage2 stage-common stage-halpi2-common stage-halos-base stage-halos-headless stage-export"
 DEPLOY_COMPRESSION="xz"
 COMPRESSION_LEVEL=6

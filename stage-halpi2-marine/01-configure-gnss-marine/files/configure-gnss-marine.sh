@@ -9,7 +9,7 @@ TARGET_BAUD=115200
 TARGET_RATE=100      # ms = 10 Hz
 TARGET_MODEL=5       # Sea
 DEFAULT_PROTVER=18
-UBXTOOL_WAIT=2       # seconds
+UBXTOOL_WAIT=4       # seconds
 
 get_uart_devices() {
     if [ ! -f "$GPSD_DEFAULTS" ]; then
@@ -27,8 +27,11 @@ get_uart_devices() {
 }
 
 probe_receiver() {
-    local device="$1" baud="$2"
-    ubxtool -f "$device" -s "$baud" -w "$UBXTOOL_WAIT" -p MON-VER 2>/dev/null
+    local device="$1" baud="$2" output
+    output=$(ubxtool -f "$device" -s "$baud" -w "$UBXTOOL_WAIT" -p MON-VER 2>/dev/null)
+    # ubxtool exits 0 even with no response; validate actual UBX output
+    echo "$output" | grep -q "MON-VER" || return 1
+    echo "$output"
 }
 
 parse_protver() {
@@ -68,7 +71,7 @@ configure_device() {
     echo "Protocol version: $protver"
 
     echo "Setting 10 Hz update rate..."
-    run_ubxtool "$device" "$current_baud" "$protver" -p "RATE,$TARGET_RATE" \
+    run_ubxtool "$device" "$current_baud" "$protver" -p "CFG-RATE,$TARGET_RATE" \
         || { echo "ERROR: RATE failed"; return 1; }
 
     echo "Setting Sea dynamic model..."

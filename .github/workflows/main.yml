@@ -161,6 +161,8 @@ jobs:
     name: 🚀 Draft GitHub Release
     needs: [image-builder]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: ⬇ Checkout repository

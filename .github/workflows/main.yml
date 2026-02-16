@@ -79,6 +79,44 @@ jobs:
             enabled: true
 
     steps:
+      - name: 🧹 Free disk space
+        run: |
+          echo "=== Disk space before cleanup ==="
+          df -h /
+          sudo docker system prune --all --force --volumes
+          sudo swapoff -a
+          sudo rm -rf /mnt/swapfile /swapfile
+          sudo rm -rf \
+            /opt/google/chrome \
+            /opt/microsoft/msedge \
+            /opt/microsoft/powershell \
+            /opt/mssql-tools \
+            /opt/hostedtoolcache \
+            /opt/pipx \
+            /usr/lib/mono \
+            /usr/local/julia* \
+            /usr/local/lib/android \
+            /usr/local/lib/node_modules \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/share/dotnet \
+            /usr/share/swift \
+            /usr/local/share/boost \
+            /opt/ghc \
+            /usr/local/go \
+            /root/.cache \
+            /home/runner/.cache
+          sudo apt-get purge -y \
+            apache2 nginx ant azure-cli snapd \
+            php8* r-base imagemagick gfortran ghc* google-cloud-cli \
+            google-chrome-stable firefox mysql-server mysql-client \
+            postgresql-client-* temurin-* 2>/dev/null || true
+          sudo apt-get autoremove -y
+          sudo apt-get autoclean
+          sudo rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+          echo "=== Disk space after cleanup ==="
+          df -h /
+
       - name: ⬇ Checkout the halos repository
         if: matrix.enabled != false
         uses: actions/checkout@v4

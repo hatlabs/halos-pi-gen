@@ -17,6 +17,8 @@ The `halos-marine` metapackage depends on `halos`, so the base system is automat
 stage-halos-marine/
 ├── 00-install-halos-marine/
 │   └── 00-packages      # halos-marine metapackage
+├── 01-setup-gpsd/
+│   └── 01-run.sh        # Default gpsd config (HALPI2 overrides in stage-halpi2-marine)
 ├── prerun.sh
 └── README.md
 ```

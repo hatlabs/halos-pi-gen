@@ -63,19 +63,7 @@ STAGE_LIST="stage0 stage1 stage2 stage-common stage-halpi2-common stage-halos-ba
 
 ## Remote Flashing
 
-```bash
-# Flash an image to a running device over the network
-./run flash-remote halos.local ~/w/hatlabs/HALPI2/images/image.img.xz
-
-# Also supports .img.gz and plain .img
-./run flash-remote halos.local image.img
-```
-
-Streams a decompressed image over LAN using `ncat` (dev machine) and `busybox nc` (target). The device reboots automatically after flashing. After flashing, the device has the default `pi`/`halos` credentials.
-
-**Prerequisites**: `ncat` (from nmap: `brew install nmap`), `busybox` on target.
-
-**Important**: This overwrites the entire block device. If the transfer fails after the handshake, the device boots the new (possibly partial) image. If it doesn't boot, physical re-flash is needed.
+Extracted to standalone tool: [hatlabs/flash-live-remote](https://github.com/hatlabs/flash-live-remote)
 
 ## CI/CD
 

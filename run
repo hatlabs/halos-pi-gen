@@ -91,6 +91,61 @@ function docker:clean {
   fi
 }
 
+function docker:build-local {
+  #@ Build a specific image directly with pi-gen (no act)
+  #@ Category: Build
+
+  _require docker git
+
+  if [ $# -lt 1 ]; then
+    echo "Error: config file required" >&2
+    echo "" >&2
+    echo "Usage: ./run docker:build-local <config-file>" >&2
+    echo "" >&2
+    echo "Available configs:" >&2
+    for f in config.*; do
+      [ -f "$f" ] && echo "  $f"
+    done >&2
+    return 1
+  fi
+
+  local config_file="$1"
+  if [ ! -f "$config_file" ]; then
+    echo "Error: config file '$config_file' not found" >&2
+    return 1
+  fi
+
+  local pi_gen_dir="pi-gen"
+
+  # Clone pi-gen if not present
+  if [ ! -d "$pi_gen_dir" ]; then
+    echo "Cloning pi-gen (arm64 branch)..."
+    git clone --depth 1 --branch arm64 https://github.com/RPi-Distro/pi-gen.git "$pi_gen_dir"
+  fi
+
+  # Copy stages, config, and VERSION into pi-gen
+  echo "Preparing build..."
+  cp VERSION "$pi_gen_dir/VERSION"
+  cp -R stage-* "$pi_gen_dir/"
+  touch "$pi_gen_dir/stage5/SKIP"
+  touch "$pi_gen_dir/stage2/SKIP_IMAGES"
+  touch "$pi_gen_dir/stage4/SKIP_IMAGES"
+  cp "$config_file" "$pi_gen_dir/config"
+
+  local halos_version
+  halos_version=$(cat VERSION)
+  local img_name
+  img_name=$(grep '^IMG_NAME=' "$config_file" | head -1 | cut -d'"' -f2)
+  local img_filename="${img_name}_${halos_version}"
+
+  echo "Building $img_name (version $halos_version)..."
+  cd "$pi_gen_dir"
+  RELEASE='trixie' IMG_FILENAME="$img_filename" ARCHIVE_FILENAME="$img_filename" ./build-docker.sh
+  cd "$PROJECT_ROOT"
+
+  echo "Build complete. Output in $pi_gen_dir/deploy/"
+}
+
 ################################################################################
 # Flash Commands
 

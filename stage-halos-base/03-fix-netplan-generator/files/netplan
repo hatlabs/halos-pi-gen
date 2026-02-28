@@ -1,0 +1,19 @@
+#!/bin/sh
+# Wrapper for the netplan systemd generator to prevent a D-Bus deadlock
+# during daemon-reload.
+#
+# The netplan generator resolves system groups via NSS. With libnss-systemd
+# installed (pulled in by cockpit-ws), the 'systemd' NSS module tries to
+# reach systemd-userdbd over D-Bus. During daemon-reload, PID 1 is blocked
+# waiting for the generator subprocess (sd-gens), so the D-Bus call
+# deadlocks until timeout (~45s per reload). cloud-init triggers ~11
+# reloads, turning a 15-second first boot into 10 minutes.
+#
+# SYSTEMD_BYPASS_USERDB=1 tells nss-systemd to return immediately without
+# D-Bus calls. This is safe for generators, which only need system groups
+# already present in /etc/group.
+#
+# See: https://bugs.launchpad.net/netplan/+bug/2071747
+#      https://bugs.launchpad.net/netplan/+bug/1999178
+export SYSTEMD_BYPASS_USERDB=1
+exec /usr/libexec/netplan/generate "$@"
